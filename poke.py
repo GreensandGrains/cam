@@ -1,0 +1,36 @@
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+import time
+import os
+
+# Wait 5 seconds before starting
+time.sleep(5)
+
+# Read messages from file
+with open("spam.txt", "r", encoding="utf-8") as file:
+    messages = file.readlines()
+
+# Get token and channel ID from environment variables
+TOKEN = os.getenv("DISCORD_TOKEN")
+CHANNEL_ID = os.getenv("DISCORD_CHANNEL_ID")
+
+# Safety check
+if not TOKEN or not CHANNEL_ID:
+    raise Exception("Missing environment variables: DISCORD_TOKEN or DISCORD_CHANNEL_ID")
+
+headers = {
+    'authorization': TOKEN,
+    'Content-Type': 'application/json'
+}
+
+i = 0
+while True:
+    message = messages[i % len(messages)].strip()
+    payload = {'content': message}
+
+    url = f"https://discord.com/api/v9/channels/{CHANNEL_ID}/messages"
+    r = requests.post(url, json=payload, headers=headers)
+
+    i += 1
+    time.sleep(1)  # delay to avoid spam detection
