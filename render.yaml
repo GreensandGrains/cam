@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: cam
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: ./start.sh
+    plan: free
+    envVars:
+      - key: DISCORD_TOKEN
+        value: your_discord_token
+      - key: DISCORD_CHANNEL_ID
+        value: your_channel_id
