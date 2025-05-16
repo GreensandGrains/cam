@@ -1,1 +1,1 @@
-python poke.py & sanjay.py
+python poke.py
